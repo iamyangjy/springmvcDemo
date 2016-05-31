@@ -4,16 +4,34 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+    <!--handlerMapping 注册-->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+        <property name="removeSemicolonContent" value="false"/>
+<!--        <property name="interceptors">
+            <list>
+                <ref bean="handlerInterceptor1"/>
+                <ref bean="handlerInterceptor2"/>
+            </list>
+        </property>-->
+    </bean>
+
+    <!-- handlerAdapter 注册 -->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters" ref="fastJsonHttpMessageConverter"/>
+    </bean>
+
     <!-- 只搜索@Controller和@ControllerAdvice标注的类 不搜索其他标注的类 -->
     <context:component-scan
             base-package="com.qiudao.demo.controller"
             use-default-filters="false">
         <context:include-filter type="annotation"
-                                expression="org.springframework.stereotype.Controller" />
+                                expression="org.springframework.stereotype.Controller"/>
         <context:include-filter type="annotation"
-                                expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
         <context:exclude-filter type="annotation"
-                                expression="org.springframework.stereotype.Service" />
+                                expression="org.springframework.stereotype.Service"/>
     </context:component-scan>
 
     <!--静态资源,不进行拦截-->
@@ -30,21 +48,28 @@
         <property name="maxUploadSize" value="10485760"/>
     </bean>
 
-    <!--对象装换为json-->
-    <mvc:annotation-driven>
-        <mvc:message-converters register-defaults="true">
-            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
-                <property name="supportedMediaTypes" value="application/json;charset=UTF-8"/>
-                <property name="features">
-                    <array>
-                        <value>QuoteFieldNames</value><!--输出的key时是否使用双引号，默认为true-->
-                        <value>WriteNullListAsEmpty</value><!--List字段如果为null，输出为[],而非null-->
-                        <value>WriteNullStringAsEmpty</value><!--字符类型字段如果为null，输出""-->
-                        <value>WriteMapNullValue</value><!--是否输出值为null的字段，默认为false-->
-                        <!--<value>WriteNullNumberAsZero</value>-->
-                    </array>
-                </property>
-            </bean>
-        </mvc:message-converters>
-    </mvc:annotation-driven>
+    <!--json message Convert-->
+    <bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+        <property name="supportedMediaTypes" value="application/json;charset=UTF-8"/>
+        <property name="features">
+            <array>
+                <value>QuoteFieldNames</value><!--输出的key时是否使用双引号，默认为true-->
+                <value>WriteNullListAsEmpty</value><!--List字段如果为null，输出为[],而非null-->
+                <value>WriteNullStringAsEmpty</value><!--字符类型字段如果为null，输出""-->
+                <value>WriteMapNullValue</value><!--是否输出值为null的字段，默认为false-->
+                <!--<value>WriteNullNumberAsZero</value>-->
+            </array>
+        </property>
+    </bean>
+
+    <!--RequestMapping interceptor,拦截器-->
+    <mvc:interceptors>
+        <bean class="com.qiudao.demo.interceptor.HandlerInterceptor1"/>
+        <bean class="com.qiudao.demo.interceptor.HandlerInterceptor2"/>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.qiudao.demo.interceptor.LoginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
 </beans>

@@ -26,7 +26,7 @@
         <!--支持下划线命名转驼峰命名法-->
         <setting name="mapUnderscoreToCamelCase" value="true"/>
         <!--设置日志使用类型-->
-        <setting name="logImpl" value="LOG4J2"/>
+        <setting name="logImpl" value="LOG4J"/>
     </settings>
 
 </configuration>

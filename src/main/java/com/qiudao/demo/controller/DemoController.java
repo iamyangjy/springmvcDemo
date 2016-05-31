@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.qiudao.demo.domain.Demo;
 import com.qiudao.demo.service.DemoService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.omg.CORBA.OBJ_ADAPTER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,4 +36,12 @@ public class DemoController {
         //int id = jsonObject.getInteger("id");
         return demoService.queryDemo(id);
     }
+
+    @RequestMapping(value = "/qiu", method = RequestMethod.POST)
+    @ResponseBody
+    public Demo queryDemo(@RequestBody String body) throws Exception{
+        logger.info("jkjkjk");
+        return new Demo();
+    }
+
 }
