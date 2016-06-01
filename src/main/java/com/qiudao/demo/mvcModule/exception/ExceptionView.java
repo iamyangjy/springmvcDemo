@@ -1,4 +1,4 @@
-package com.qiudao.demo.exception;
+package com.qiudao.demo.mvcModule.exception;
 
 /**
  * Created by hdfs on 2016/5/30.

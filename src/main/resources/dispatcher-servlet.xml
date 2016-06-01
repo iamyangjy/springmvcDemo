@@ -9,17 +9,18 @@
     <!--handlerMapping 注册-->
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
         <property name="removeSemicolonContent" value="false"/>
-<!--        <property name="interceptors">
-            <list>
-                <ref bean="handlerInterceptor1"/>
-                <ref bean="handlerInterceptor2"/>
-            </list>
-        </property>-->
     </bean>
 
     <!-- handlerAdapter 注册 -->
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-        <property name="messageConverters" ref="fastJsonHttpMessageConverter"/>
+        <property name="webBindingInitializer" ref="webBindingInitializer"/>
+        <property name="messageConverters">
+            <list>
+                <ref bean="fastJsonHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"/>
+            </list>
+        </property>
     </bean>
 
     <!-- 只搜索@Controller和@ControllerAdvice标注的类 不搜索其他标注的类 -->
@@ -48,7 +49,7 @@
         <property name="maxUploadSize" value="10485760"/>
     </bean>
 
-    <!--json message Convert-->
+    <!--http message Convert-->
     <bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
         <property name="supportedMediaTypes" value="application/json;charset=UTF-8"/>
         <property name="features">
@@ -62,14 +63,35 @@
         </property>
     </bean>
 
-    <!--RequestMapping interceptor,拦截器-->
+    <!--object convert-->
+    <!--注册conversionService-->
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+<!--        <property name="converters">
+            <set>
+                <bean class="com.qiudao.demo.mvcModule.converter.PhoneNumberToStringConverter"/>
+                <bean class="com.qiudao.demo.mvcModule.converter.StringToPhoneNumberConvert"/>
+            </set>
+        </property>-->
+        <property name="formatters">
+            <set>
+                <bean class="com.qiudao.demo.mvcModule.formatter.PhoneNumberFormatAnnotationFormatterFactory"/>
+            </set>
+        </property>
+    </bean>
+    <!--使用ConfigurableWebBindingInitializer注册conversionService-->
+    <bean id="webBindingInitializer" class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+        <property name="conversionService" ref="conversionService"/>
+    </bean>
+
+    <!--RequestMapping interceptor,拦截器, 注册在HandlerMapping当中，本例中注册在RequestMappingHandlerMapping中-->
     <mvc:interceptors>
-        <bean class="com.qiudao.demo.interceptor.HandlerInterceptor1"/>
-        <bean class="com.qiudao.demo.interceptor.HandlerInterceptor2"/>
+        <bean class="com.qiudao.demo.mvcModule.interceptor.HandlerInterceptor1"/>
+        <bean class="com.qiudao.demo.mvcModule.interceptor.HandlerInterceptor2"/>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
-            <bean class="com.qiudao.demo.interceptor.LoginInterceptor"/>
+            <bean class="com.qiudao.demo.mvcModule.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
+
 
 </beans>

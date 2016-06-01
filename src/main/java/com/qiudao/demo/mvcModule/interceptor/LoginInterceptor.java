@@ -1,8 +1,7 @@
-package com.qiudao.demo.interceptor;
+package com.qiudao.demo.mvcModule.interceptor;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 

@@ -1,4 +1,4 @@
-package com.qiudao.demo.interceptor;
+package com.qiudao.demo.mvcModule.interceptor;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
