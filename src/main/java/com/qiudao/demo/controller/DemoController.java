@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.ConfigurableWebBindingInitializer;
+import org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod;
 import org.springframework.web.servlet.resource.DefaultServletHttpRequestHandler;
 
@@ -76,6 +77,7 @@ public class DemoController {
     @RequestMapping(value = "/format1")
     @ResponseBody
     public Demo format2(@ModelAttribute("model")FormatterModel formatterModel){
+        AnnotationMethodHandlerAdapter annotationMethodHandlerAdapter;
         logger.info(formatterModel.toString());
         return new Demo();
     }

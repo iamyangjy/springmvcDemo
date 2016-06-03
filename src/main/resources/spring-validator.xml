@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <description>spring 数据校验</description>
+
+
+    <!--validator, 验证器-->
+    <bean id="validator"
+          class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+        <!--        &lt;!&ndash; 如果不加,默认使用classpath下的 ValidationMessages.properties 此处主要把bean validation的消息查找委托给spring的messageSource &ndash;&gt;
+                <property name="validationMessageSource" ref="messageSource" />-->
+    </bean>
+
+</beans>
